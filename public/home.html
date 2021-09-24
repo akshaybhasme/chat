@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test 1234</title>
+</head>
+<body>
+    <div id="chat-area" style="width: 500px; height: 600px">
+
+    </div>
+    <p>Hello! Please type in your message here:</p>
+    <textarea id="message"></textarea>
+    <button id="btn-send">Send</button>
+</body>
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script>
+
+    function populateChatDataOnScreen(chatData) {
+        chatArea.empty();
+        chatData.forEach((chatMessage) => {
+            chatArea.append(`<p>${chatMessage}</p>`)
+        })
+    }
+
+    function getChatData() {
+        $.get('/chat', populateChatDataOnScreen);
+    }
+
+    getChatData();
+    const messageArea = $('#message');
+    const sendButton = $('#btn-send');
+    const chatArea = $('#chat-area');
+
+    sendButton.click((e) => {
+        console.log('Hello!');
+        const message = messageArea.val();
+
+        $.post('webhook/chat', {
+            message
+        }, populateChatDataOnScreen);
+    });
+
+    setInterval(getChatData, 10*1000);
+
+</script>
+</html>
